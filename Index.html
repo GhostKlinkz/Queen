@@ -93,45 +93,83 @@ footer { background:#0f0f1e; padding:30px 60px; text-align:center; font-size:0.9
 <!-- Welcome Screen -->
 <div id="welcome-screen">
   <h1>Добро пожаловать в <span>Queen</span></h1>
-  <p>Discord-сервер для настоящих королей и королев 🎶👑</p>
+  <p>Сайт еще в разработке! Спасибо что зашли.</p>
   <button id="enter-btn" class="btn">Присоединиться</button>
 </div>
 
 <!-- Main Site -->
 <div id="main-site" class="hidden">
 
-  <!-- Header -->
-<header style="position:relative; display:flex; justify-content:space-between; align-items:center; padding:20px 60px; background: rgba(0,0,0,0.75); box-shadow:0 4px 15px rgba(0,0,0,0.4);">
-  
+<!-- Header -->
+<header>
   <!-- Логотип -->
-  <a href="#" class="logo" style="display:flex; align-items:center; font-size:1.7rem; font-weight:700; color:#fff; text-decoration:none;">
-    <img src="https://i.pinimg.com/736x/d6/4f/ea/d64fea9574d6f0329877e86a7dea684a.jpg" alt="Queen" style="width:50px; margin-right:12px; border-radius:15px; animation: spin 12s linear infinite;">
-    Queen
+  <a href="index.html" class="logo" style="display:flex; align-items:center; gap:12px; font-size:1.7rem; font-weight:800; color:#fff; text-decoration:none; line-height:1;">
+    <img src="https://i.pinimg.com/736x/d6/4f/ea/d64fea9574d6f0329877e86a7dea684a.jpg" alt="Queen" style="width:50px; height:50px; border-radius:15px; object-fit:cover;">
+    <span>Queen</span>
   </a>
 
   <!-- Навигация -->
-  <nav style="display:flex; gap:35px;">
-    <a href="#about" style="color:#fff; text-decoration:none; font-weight:500; position:relative;">О сервере</a>
-    <a href="#features" style="color:#fff; text-decoration:none; font-weight:500; position:relative;">Особенности</a>
-    <a href="#team" style="color:#fff; text-decoration:none; font-weight:500; position:relative;">Команда</a>
-    <a href="#recruit" style="color:#fff; text-decoration:none; font-weight:500; position:relative;">Набор</a>
-    <a href="#contact" style="color:#fff; text-decoration:none; font-weight:500; position:relative;">Контакты</a>
+  <nav style="display:flex; align-items:center; gap:24px;">
+    <a href="#about" style="color:#fff; text-decoration:none;">Про сервер</a>
+    <a href="#features" style="color:#fff; text-decoration:none;">Особенности</a>
+    <a href="#team" style="color:#fff; text-decoration:none;">Команда</a>
+    <a href="#recruit" style="color:#fff; text-decoration:none;">Набор</a>
+    <a href="#contact" style="color:#fff; text-decoration:none;">Контакты</a>
+    <a href="register.html" class="register-btn" style="margin-left:10px;">Регистрация</a>
   </nav>
 
-  <!-- Регистрация и аватар -->
-  <div id="user-block" style="display:flex; align-items:center; gap:15px;">
-    <a href="register.html" class="register-btn">Регистрация</a>
-    
-    <!-- Аватар и имя пользователя -->
-    <div id="user-info" style="display:flex; align-items:center; gap:10px; background: rgba(0,0,0,0.5); padding:5px 10px; border-radius:15px; display:none;">
+  <!-- Аватар в правом углу -->
+  <div id="user-block" style="display:flex; align-items:center; gap:10px;">
+    <div id="user-info" style="display:flex; align-items:center; gap:10px; background: rgba(0,0,0,0.45); padding:6px 10px; border-radius:14px; display:none;">
       <img id="user-avatar" src="default-avatar.png" alt="Avatar" style="width:40px; height:40px; border-radius:50%; object-fit:cover;">
       <span id="user-name" style="color:#fff; font-weight:600;"></span>
     </div>
-  </div>
 
+    <!-- Белый человечек (виден когда не залогинен) -->
+    <button id="guest-btn" style="width:42px; height:42px; border-radius:50%; background:#fff; display:flex; align-items:center; justify-content:center; border:none; cursor:pointer;">
+      <img src="https://cdn-icons-png.flaticon.com/512/847/847969.png" alt="guest" style="width:22px; height:22px;">
+    </button>
+  </div>
 </header>
 
-<!-- Hero -->
+<!-- Скрипт подгрузки данных пользователя -->
+<script>
+  (function(){
+    let currentUser = null;
+    try { currentUser = JSON.parse(localStorage.getItem('currentUser')); }
+    catch(e){ console.warn('currentUser parse error', e); }
+
+    const userInfo = document.getElementById('user-info');
+    const userAvatar = document.getElementById('user-avatar');
+    const userName = document.getElementById('user-name');
+    const registerBtn = document.querySelector('.register-btn');
+    const guestBtn = document.getElementById('guest-btn');
+
+    const DEFAULT_ICON = 'https://cdn-icons-png.flaticon.com/512/847/847969.png';
+    const DEFAULT_LOCAL = 'default-avatar.png';
+
+    if (currentUser && currentUser.username) {
+      // Показываем блок с именем и аватаром
+      userName.textContent = currentUser.username;
+      userInfo.style.display = 'flex';
+      if (currentUser.avatar) userAvatar.src = currentUser.avatar;
+      else userAvatar.src = DEFAULT_LOCAL;
+      if (registerBtn) registerBtn.style.display = 'none';
+      // клик по аватару — профиль
+      userInfo.addEventListener('click', ()=> window.location.href = 'profile.html');
+      guestBtn.style.display = 'none';
+    } else {
+      // гость — показываем кнопку с иконкой
+      userInfo.style.display = 'none';
+      if (registerBtn) registerBtn.style.display = 'inline-block';
+      guestBtn.style.display = 'flex';
+      guestBtn.addEventListener('click', ()=> window.location.href = 'login.html');
+    }
+  })();
+</script>
+
+
+<!--  Hero -->
 <section class="hero">
   <div class="hero-content">
     <h1>Добро пожаловать в <span>Queen</span></h1>
@@ -161,7 +199,6 @@ footer { background:#0f0f1e; padding:30px 60px; text-align:center; font-size:0.9
   </div>
 </section>
 
-<!-- Команда -->
 <!-- Команда -->
 <section id="team" class="section">
   <h2>Команда</h2>
@@ -261,16 +298,6 @@ footer { background:#0f0f1e; padding:30px 60px; text-align:center; font-size:0.9
   });
   messageInput.addEventListener('keypress', e=>{if(e.key==='Enter') sendMessageBtn.click();});
 
-  // User Info
-  const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-  const userInfoDiv = document.getElementById('user-info');
-  const userAvatar = document.getElementById('user-avatar');
-  const userName = document.getElementById('user-name');
-  if(currentUser){
-      userName.textContent = currentUser.username;
-      userAvatar.src = currentUser.avatar ? currentUser.avatar : 'default-avatar.png';
-      userInfoDiv.style.display = 'flex';
-  } else { userInfoDiv.style.display = 'none'; }
 </script>
 
 </body>
